@@ -29,7 +29,7 @@ Response: ${
     }
 ##############################################################################################################
 `;
-    this.loggger.error(logFormat, 'HttpException filter ');
+    this.loggger.error(logFormat, 'HttpException filter');
     response.status(status).json({
       code: status,
       message: exceptionResponse?.message || exception.message,
