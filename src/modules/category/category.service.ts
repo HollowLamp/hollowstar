@@ -52,4 +52,23 @@ export class CategoryService {
 
     return category.articles;
   }
+
+  async getPublishedArticlesByCategory(id: number) {
+    const category = await this.prisma.category.findUnique({
+      where: { id },
+      include: {
+        articles: {
+          where: {
+            status: 'published',
+          },
+        },
+      },
+    });
+
+    if (!category) {
+      throw new NotFoundException('分类未找到');
+    }
+
+    return category.articles;
+  }
 }

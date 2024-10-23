@@ -47,6 +47,13 @@ export class AdminCategoryController {
   async deleteCategory(@Param('id', ParseIntPipe) id: number) {
     return await this.categoryService.deleteCategory(id);
   }
+
+  @ApiOperation({ summary: '获取分类下所有文章' })
+  @ApiParam({ name: 'id', description: '分类 ID' })
+  @Get(':id')
+  async getArticlesByCategory(@Param('id', ParseIntPipe) id: number) {
+    return await this.categoryService.getArticlesByCategory(id);
+  }
 }
 
 @ApiTags('分类查看')
@@ -65,6 +72,6 @@ export class PublicCategoryController {
   @ApiParam({ name: 'id', description: '分类 ID' })
   @Get(':id')
   async getArticlesByCategory(@Param('id', ParseIntPipe) id: number) {
-    return await this.categoryService.getArticlesByCategory(id);
+    return await this.categoryService.getPublishedArticlesByCategory(id);
   }
 }
