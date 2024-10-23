@@ -32,7 +32,6 @@ Response: ${
     this.loggger.error(logFormat, 'HttpException filter ');
     response.status(status).json({
       code: status,
-      success: false,
       message: exceptionResponse?.message || exception.message,
     });
   }
