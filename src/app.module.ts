@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth/JwtAuthGuard';
 import { PrismaModule } from './database/prisma.module';
+import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 
 @Module({
   imports: [
@@ -37,6 +38,10 @@ import { PrismaModule } from './database/prisma.module';
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: PrismaExceptionFilter,
     },
     {
       provide: APP_INTERCEPTOR,
