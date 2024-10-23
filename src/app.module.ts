@@ -7,15 +7,16 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggerInterceptor } from './common/interceptors/logger.interceptor';
 import { FormatResponseInterceptor } from './common/interceptors/format-response.interceptor';
 import { LoggerModule } from './logger/logger.module';
-import { PrismaService } from './database/prisma.service';
 import { CategoryModule } from './modules/category/category.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth/JwtAuthGuard';
+import { PrismaModule } from './database/prisma.module';
 
 @Module({
   imports: [
     LoggerModule,
+    PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -33,7 +34,6 @@ import { JwtAuthGuard } from './auth/JwtAuthGuard';
   controllers: [AppController],
   providers: [
     AppService,
-    PrismaService,
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
