@@ -9,12 +9,7 @@ import {
   ParseIntPipe,
   Delete,
 } from '@nestjs/common';
-import {
-  ApiOperation,
-  ApiTags,
-  ApiParam,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { IsPublic } from 'src/common/decorators/is-public.decorator';
@@ -33,7 +28,6 @@ export class CategoryController {
   }
 
   @ApiOperation({ summary: '更新分类' })
-  @ApiParam({ name: 'id', description: '分类 ID' })
   @Put(':id')
   @ApiBearerAuth()
   async updateCategory(
@@ -44,7 +38,6 @@ export class CategoryController {
   }
 
   @ApiOperation({ summary: '删除分类' })
-  @ApiParam({ name: 'id', description: '分类 ID' })
   @Delete(':id')
   @ApiBearerAuth()
   async deleteCategory(@Param('id', ParseIntPipe) id: number) {
@@ -59,7 +52,6 @@ export class CategoryController {
   }
 
   @ApiOperation({ summary: '获取分类下所有文章' })
-  @ApiParam({ name: 'id', description: '分类 ID' })
   @Get(':id')
   @IsPublic()
   async getArticlesByCategory(@Param('id', ParseIntPipe) id: number) {
