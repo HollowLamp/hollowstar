@@ -8,16 +8,16 @@ import { ContentStatus } from 'src/enums/content-status.enum';
 export class NoteService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createNote(createnoteDto: CreateNoteDto) {
+  async createNote(createNoteDto: CreateNoteDto) {
     return await this.prisma.note.create({
-      data: createnoteDto,
+      data: createNoteDto,
     });
   }
 
-  async updateNote(id: number, updatenoteDto: UpdateNoteDto) {
+  async updateNote(id: number, updateNoteDto: UpdateNoteDto) {
     return await this.prisma.note.update({
       where: { id },
-      data: updatenoteDto,
+      data: updateNoteDto,
     });
   }
 
