@@ -15,6 +15,7 @@ import { PrismaModule } from './database/prisma.module';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { ArticleModule } from './modules/article/article.module';
 import { NoteModule } from './modules/note/note.module';
+import { ThoughtModule } from './modules/thought/thought.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { NoteModule } from './modules/note/note.module';
     AuthModule,
     ArticleModule,
     NoteModule,
+    ThoughtModule,
   ],
   controllers: [AppController],
   providers: [
