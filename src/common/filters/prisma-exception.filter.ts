@@ -25,6 +25,10 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         status = 404;
         message = '内容未找到';
         break;
+      case 'P2003':
+        status = 400;
+        message = '外键约束错误';
+        break;
       default:
         message = exception.message;
     }

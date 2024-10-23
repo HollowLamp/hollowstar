@@ -13,6 +13,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth/JwtAuthGuard';
 import { PrismaModule } from './database/prisma.module';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
+import { ArticleModule } from './modules/article/article.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter'
     }),
     CategoryModule,
     AuthModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [
