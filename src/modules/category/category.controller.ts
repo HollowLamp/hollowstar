@@ -40,7 +40,7 @@ export class CategoryController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.categoryService.updateCategory(id, updateCategoryDto);
+    return await this.categoryService.updateCategory(id, updateCategoryDto);
   }
 
   @ApiOperation({ summary: '删除分类' })
@@ -48,7 +48,7 @@ export class CategoryController {
   @Delete(':id')
   @ApiBearerAuth()
   async deleteCategory(@Param('id', ParseIntPipe) id: number) {
-    return this.categoryService.deleteCategory(id);
+    return await this.categoryService.deleteCategory(id);
   }
 
   @ApiOperation({ summary: '获取所有分类' })
