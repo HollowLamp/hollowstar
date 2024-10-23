@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -45,6 +45,11 @@ export class CategoryService {
       where: { id },
       include: { articles: true },
     });
+
+    if (!category) {
+      throw new NotFoundException('分类未找到');
+    }
+
     return category.articles;
   }
 }
