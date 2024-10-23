@@ -14,6 +14,7 @@ import { JwtAuthGuard } from './auth/JwtAuthGuard';
 import { PrismaModule } from './database/prisma.module';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { ArticleModule } from './modules/article/article.module';
+import { NoteModule } from './modules/note/note.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ArticleModule } from './modules/article/article.module';
     CategoryModule,
     AuthModule,
     ArticleModule,
+    NoteModule,
   ],
   controllers: [AppController],
   providers: [
