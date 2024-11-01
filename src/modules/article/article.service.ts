@@ -28,24 +28,29 @@ export class ArticleService {
   }
 
   async getAllArticles() {
-    return await this.prisma.article.findMany();
+    return await this.prisma.article.findMany({
+      include: { category: true },
+    });
   }
 
   async getArticlesByStatus(status: ContentStatus) {
     return this.prisma.article.findMany({
       where: { status },
+      include: { category: true },
     });
   }
 
   async getArticleById(id: number) {
     return this.prisma.article.findUnique({
       where: { id },
+      include: { category: true },
     });
   }
 
   async getPublishedArticleById(id: number) {
     return this.prisma.article.findFirst({
       where: { id, status: ContentStatus.PUBLISHED },
+      include: { category: true },
     });
   }
 }

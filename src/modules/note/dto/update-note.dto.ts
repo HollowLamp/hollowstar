@@ -1,13 +1,15 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateNoteDto } from './create-note.dto';
 import { ContentStatus } from '../../../enums/content-status.enum';
-import { IsEnum } from 'class-validator';
+import { IsEnum, IsOptional } from 'class-validator';
 
 export class UpdateNoteDto extends PartialType(CreateNoteDto) {
   @ApiProperty({ description: '随笔标题', required: false })
+  @IsOptional()
   title?: string;
 
   @ApiProperty({ description: '随笔内容', required: false })
+  @IsOptional()
   content?: string;
 
   @ApiProperty({
@@ -16,5 +18,6 @@ export class UpdateNoteDto extends PartialType(CreateNoteDto) {
     enum: ContentStatus,
   })
   @IsEnum(ContentStatus, { message: '状态必须是 published 或 hidden' })
+  @IsOptional()
   status?: ContentStatus;
 }
