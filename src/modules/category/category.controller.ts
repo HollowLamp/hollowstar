@@ -48,7 +48,7 @@ export class AdminCategoryController {
     return await this.categoryService.deleteCategory(id);
   }
 
-  @ApiOperation({ summary: '获取分类下所有文章' })
+  @ApiOperation({ summary: '获取分类下所有文章的数目' })
   @ApiParam({ name: 'id', description: '分类 ID' })
   @Get(':id')
   async getArticlesByCategory(@Param('id', ParseIntPipe) id: number) {

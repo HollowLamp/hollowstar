@@ -48,14 +48,18 @@ export class CategoryService {
   async getArticlesByCategory(id: number) {
     const category = await this.prisma.category.findUnique({
       where: { id },
-      include: { articles: true },
+      include: {
+        _count: {
+          select: { articles: true },
+        },
+      },
     });
 
     if (!category) {
       throw new NotFoundException('分类未找到');
     }
 
-    return category.articles;
+    return { articleCount: category._count.articles };
   }
 
   async getPublishedArticlesByCategory(id: number) {
