@@ -27,6 +27,11 @@ export class CategoryService {
       where: { id },
       include: { articles: true },
     });
+
+    if (!category) {
+      throw new NotFoundException('分类未找到');
+    }
+
     if (category.articles.length > 0) {
       throw new BadRequestException('分类下仍有文章，无法删除');
     }
