@@ -27,14 +27,36 @@ export class ThoughtService {
     });
   }
 
-  async getAllThoughts() {
-    return await this.prisma.thought.findMany();
-  }
+  async getPaginatedThoughts(
+    page: number,
+    limit: number,
+    status?: ContentStatus,
+    sortOrder: 'asc' | 'desc' = 'desc',
+    search?: string,
+  ) {
+    const skip = (page - 1) * limit;
 
-  async getThoughtsByStatus(status: ContentStatus) {
-    return this.prisma.thought.findMany({
-      where: { status },
-    });
+    const where: any = {};
+    if (status) {
+      where.status = status;
+    }
+    if (search) {
+      where.content = { contains: search, mode: 'insensitive' };
+    }
+
+    const orderBy = { createdAt: sortOrder };
+
+    const [data, total] = await Promise.all([
+      this.prisma.thought.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy,
+      }),
+      this.prisma.thought.count({ where }),
+    ]);
+
+    return { data, total, page, limit };
   }
 
   async getThoughtById(id: number) {

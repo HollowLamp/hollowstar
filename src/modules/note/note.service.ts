@@ -9,38 +9,61 @@ export class NoteService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createNote(createNoteDto: CreateNoteDto) {
-    return await this.prisma.note.create({
+    return this.prisma.note.create({
       data: createNoteDto,
     });
   }
 
   async updateNote(id: number, updateNoteDto: UpdateNoteDto) {
-    return await this.prisma.note.update({
+    return this.prisma.note.update({
       where: { id },
       data: updateNoteDto,
     });
   }
 
   async deleteNote(id: number) {
-    return await this.prisma.note.delete({
+    return this.prisma.note.delete({
       where: { id },
     });
   }
 
-  async getAllNotes() {
-    return await this.prisma.note.findMany();
-  }
+  async getPaginatedNotes(
+    page: number,
+    limit: number,
+    status?: ContentStatus,
+    sortField: string = 'createdAt',
+    sortOrder: 'asc' | 'desc' = 'desc',
+    search?: string,
+  ) {
+    const skip = (page - 1) * limit;
 
-  async getNotesByStatus(status: ContentStatus) {
-    return this.prisma.note.findMany({
-      where: { status },
-    });
+    // 构建 `where` 条件
+    const where: any = {};
+    if (status) {
+      where.status = status;
+    }
+    if (search) {
+      where.title = { contains: search, mode: 'insensitive' }; // 忽略大小写的搜索
+    }
+
+    // 排序
+    const orderBy = { [sortField]: sortOrder };
+
+    const [data, total] = await Promise.all([
+      this.prisma.note.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy,
+      }),
+      this.prisma.note.count({ where }),
+    ]);
+
+    return { data, total, page, limit };
   }
 
   async getNoteById(id: number) {
-    return this.prisma.note.findUnique({
-      where: { id },
-    });
+    return this.prisma.note.findUnique({ where: { id } });
   }
 
   async getPublishedNoteById(id: number) {

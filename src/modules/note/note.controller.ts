@@ -7,12 +7,14 @@ import {
   Put,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiBearerAuth,
   ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { NoteService } from './note.service';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -28,43 +30,57 @@ export class AdminNoteController {
 
   @ApiOperation({ summary: '创建随笔' })
   @Post()
-  async createnote(@Body() createNoteDto: CreateNoteDto) {
-    return await this.noteService.createNote(createNoteDto);
+  async createNote(@Body() createNoteDto: CreateNoteDto) {
+    return this.noteService.createNote(createNoteDto);
   }
 
   @ApiOperation({ summary: '更新随笔' })
   @ApiParam({ name: 'id', description: '随笔 ID' })
   @Put(':id')
-  async updatenote(
-    @Param('id', ParseIntPipe) id,
+  async updateNote(
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateNoteDto: UpdateNoteDto,
   ) {
-    return await this.noteService.updateNote(id, updateNoteDto);
+    return this.noteService.updateNote(id, updateNoteDto);
   }
 
   @ApiOperation({ summary: '删除随笔' })
   @ApiParam({ name: 'id', description: '随笔 ID' })
   @Delete(':id')
-  async deletenote(@Param('id', ParseIntPipe) id) {
-    return await this.noteService.deleteNote(id);
+  async deleteNote(@Param('id', ParseIntPipe) id: number) {
+    return this.noteService.deleteNote(id);
   }
 
-  @ApiOperation({ summary: '获取所有随笔' })
+  @ApiOperation({ summary: '分页获取所有随笔' })
+  @ApiQuery({ name: 'page' })
+  @ApiQuery({ name: 'limit' })
+  @ApiQuery({ name: 'status', required: false })
+  @ApiQuery({ name: 'sortField', required: false })
+  @ApiQuery({ name: 'sortOrder', required: false })
+  @ApiQuery({ name: 'search', required: false })
   @Get()
-  async getAllnotes() {
-    return await this.noteService.getAllNotes();
-  }
-
-  @ApiOperation({ summary: '获取所有隐藏随笔' })
-  @Get('hidden')
-  async getHiddennotes() {
-    return this.noteService.getNotesByStatus(ContentStatus.HIDDEN);
+  async getAllNotes(
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10,
+    @Query('status') status?: ContentStatus,
+    @Query('sortField') sortField: string = 'createdAt',
+    @Query('sortOrder') sortOrder: 'asc' | 'desc' = 'desc',
+    @Query('search') search?: string,
+  ) {
+    return this.noteService.getPaginatedNotes(
+      page,
+      limit,
+      status,
+      sortField,
+      sortOrder,
+      search,
+    );
   }
 
   @ApiOperation({ summary: '根据ID获取随笔' })
   @ApiParam({ name: 'id', description: '随笔 ID' })
   @Get(':id')
-  async getnoteById(@Param('id', ParseIntPipe) id: number) {
+  async getNoteById(@Param('id', ParseIntPipe) id: number) {
     return this.noteService.getNoteById(id);
   }
 }
@@ -75,16 +91,25 @@ export class AdminNoteController {
 export class PublicNoteController {
   constructor(private readonly noteService: NoteService) {}
 
-  @ApiOperation({ summary: '获取所有已发布随笔' })
+  @ApiOperation({ summary: '分页获取所有已发布随笔' })
+  @ApiQuery({ name: 'page' })
+  @ApiQuery({ name: 'limit' })
   @Get()
-  async getPublishednotes() {
-    return this.noteService.getNotesByStatus(ContentStatus.PUBLISHED);
+  async getPublishedNotes(
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10,
+  ) {
+    return this.noteService.getPaginatedNotes(
+      page,
+      limit,
+      ContentStatus.PUBLISHED,
+    );
   }
 
   @ApiOperation({ summary: '根据ID获取已发布随笔' })
   @ApiParam({ name: 'id', description: '随笔 ID' })
   @Get(':id')
-  async getPublishednoteById(@Param('id', ParseIntPipe) id: number) {
+  async getPublishedNoteById(@Param('id', ParseIntPipe) id: number) {
     return this.noteService.getPublishedNoteById(id);
   }
 }

@@ -7,12 +7,14 @@ import {
   Put,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiBearerAuth,
   ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { ThoughtService } from './thought.service';
 import { CreateThoughtDto } from './dto/create-thought.dto';
@@ -28,7 +30,7 @@ export class AdminThoughtController {
 
   @ApiOperation({ summary: '创建说说' })
   @Post()
-  async createthought(@Body() createThoughtDto: CreateThoughtDto) {
+  async createThought(@Body() createThoughtDto: CreateThoughtDto) {
     return await this.thoughtService.createThought(createThoughtDto);
   }
 
@@ -36,7 +38,7 @@ export class AdminThoughtController {
   @ApiParam({ name: 'id', description: '说说 ID' })
   @Put(':id')
   async updateThought(
-    @Param('id', ParseIntPipe) id,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateThoughtDto: UpdateThoughtDto,
   ) {
     return await this.thoughtService.updateThought(id, updateThoughtDto);
@@ -45,20 +47,31 @@ export class AdminThoughtController {
   @ApiOperation({ summary: '删除说说' })
   @ApiParam({ name: 'id', description: '说说 ID' })
   @Delete(':id')
-  async deletethought(@Param('id', ParseIntPipe) id) {
+  async deleteThought(@Param('id', ParseIntPipe) id: number) {
     return await this.thoughtService.deleteThought(id);
   }
 
-  @ApiOperation({ summary: '获取所有说说' })
+  @ApiOperation({ summary: '分页获取所有说说' })
+  @ApiQuery({ name: 'page' })
+  @ApiQuery({ name: 'limit' })
+  @ApiQuery({ name: 'status', required: false })
+  @ApiQuery({ name: 'sortOrder', required: false, enum: ['asc', 'desc'] })
+  @ApiQuery({ name: 'search', required: false })
   @Get()
-  async getAllThoughts() {
-    return await this.thoughtService.getAllThoughts();
-  }
-
-  @ApiOperation({ summary: '获取所有隐藏说说' })
-  @Get('hidden')
-  async getHiddenThoughts() {
-    return this.thoughtService.getThoughtsByStatus(ContentStatus.HIDDEN);
+  async getAllThoughts(
+    @Query('page', ParseIntPipe) page,
+    @Query('limit', ParseIntPipe) limit,
+    @Query('status') status?: ContentStatus,
+    @Query('sortOrder') sortOrder: 'asc' | 'desc' = 'desc',
+    @Query('search') search?: string,
+  ) {
+    return await this.thoughtService.getPaginatedThoughts(
+      page,
+      limit,
+      status,
+      sortOrder,
+      search,
+    );
   }
 
   @ApiOperation({ summary: '根据ID获取说说' })
@@ -75,10 +88,19 @@ export class AdminThoughtController {
 export class PublicThoughtController {
   constructor(private readonly thoughtService: ThoughtService) {}
 
-  @ApiOperation({ summary: '获取所有已发布说说' })
+  @ApiOperation({ summary: '分页获取所有已发布说说' })
+  @ApiQuery({ name: 'page' })
+  @ApiQuery({ name: 'limit' })
   @Get()
-  async getPublishedThoughts() {
-    return this.thoughtService.getThoughtsByStatus(ContentStatus.PUBLISHED);
+  async getPublishedThoughts(
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10,
+  ) {
+    return this.thoughtService.getPaginatedThoughts(
+      page,
+      limit,
+      ContentStatus.PUBLISHED,
+    );
   }
 
   @ApiOperation({ summary: '根据ID获取已发布说说' })

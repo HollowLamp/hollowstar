@@ -7,12 +7,14 @@ import {
   Param,
   ParseIntPipe,
   Delete,
+  Query,
 } from '@nestjs/common';
 import {
   ApiOperation,
   ApiTags,
   ApiParam,
   ApiBearerAuth,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -48,10 +50,16 @@ export class AdminCategoryController {
     return await this.categoryService.deleteCategory(id);
   }
 
-  @ApiOperation({ summary: '获取所有分类及其下所有文章数目' })
+  @ApiOperation({ summary: '分页获取所有分类及其下所有文章数目' })
   @Get()
-  async getAllCategoriesWithAritcleCount() {
-    return await this.categoryService.getAllCategoriesWithArticleCount();
+  async getAllCategoriesWithArticleCount(
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10,
+  ) {
+    return await this.categoryService.getAllCategoriesWithArticleCount(
+      page,
+      limit,
+    );
   }
 }
 
@@ -67,10 +75,20 @@ export class PublicCategoryController {
     return await this.categoryService.getAllCategories();
   }
 
-  @ApiOperation({ summary: '获取分类下所有文章' })
+  @ApiOperation({ summary: '分页获取分类下所有已发布文章' })
   @ApiParam({ name: 'id', description: '分类 ID' })
+  @ApiQuery({ name: 'page' })
+  @ApiQuery({ name: 'limit' })
   @Get(':id')
-  async getArticlesByCategory(@Param('id', ParseIntPipe) id: number) {
-    return await this.categoryService.getPublishedArticlesByCategory(id);
+  async getPublishedArticlesByCategory(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10,
+  ) {
+    return await this.categoryService.getPublishedArticlesByCategory(
+      id,
+      page,
+      limit,
+    );
   }
 }

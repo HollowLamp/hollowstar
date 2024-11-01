@@ -22,6 +22,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
 Request original url: ${request.originalUrl}
 Method: ${request.method}
 IP: ${request.ip}
+Params: ${JSON.stringify(request.params)}
+Query: ${JSON.stringify(request.query)}
+Body: ${JSON.stringify(request.body)}
 Status code: ${status}
 Response: ${
       exception.toString() +

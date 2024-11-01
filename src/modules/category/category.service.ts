@@ -45,28 +45,46 @@ export class CategoryService {
     return await this.prisma.category.findMany();
   }
 
-  async getAllCategoriesWithArticleCount() {
-    const categories = await this.prisma.category.findMany({
-      include: {
-        _count: {
-          select: { articles: true },
+  async getAllCategoriesWithArticleCount(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
+    const [categories, total] = await Promise.all([
+      this.prisma.category.findMany({
+        skip,
+        take: limit,
+        include: {
+          _count: {
+            select: { articles: true },
+          },
         },
-      },
-    });
+      }),
+      this.prisma.category.count(),
+    ]);
 
     if (!categories || categories.length === 0) {
       throw new NotFoundException('未找到分类');
     }
 
-    return categories.map((category) => ({
-      id: category.id,
-      name: category.name,
-      slug: category.slug,
-      articleCount: category._count.articles,
-    }));
+    return {
+      data: categories.map((category) => ({
+        id: category.id,
+        name: category.name,
+        slug: category.slug,
+        articleCount: category._count.articles,
+      })),
+      total,
+      page,
+      limit,
+    };
   }
 
-  async getPublishedArticlesByCategory(id: number) {
+  async getPublishedArticlesByCategory(
+    id: number,
+    page: number,
+    limit: number,
+  ) {
+    const skip = (page - 1) * limit;
+
     const category = await this.prisma.category.findUnique({
       where: { id },
       include: {
@@ -74,6 +92,8 @@ export class CategoryService {
           where: {
             status: 'published',
           },
+          skip,
+          take: limit,
         },
       },
     });
@@ -82,6 +102,15 @@ export class CategoryService {
       throw new NotFoundException('分类未找到');
     }
 
-    return category.articles;
+    const total = await this.prisma.article.count({
+      where: { categoryId: id, status: 'published' },
+    });
+
+    return {
+      data: category.articles,
+      total,
+      page,
+      limit,
+    };
   }
 }
