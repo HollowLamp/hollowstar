@@ -45,9 +45,8 @@ export class CategoryService {
     return await this.prisma.category.findMany();
   }
 
-  async getArticlesByCategory(id: number) {
-    const category = await this.prisma.category.findUnique({
-      where: { id },
+  async getAllCategoriesWithArticleCount() {
+    const categories = await this.prisma.category.findMany({
       include: {
         _count: {
           select: { articles: true },
@@ -55,11 +54,16 @@ export class CategoryService {
       },
     });
 
-    if (!category) {
-      throw new NotFoundException('分类未找到');
+    if (!categories || categories.length === 0) {
+      throw new NotFoundException('未找到分类');
     }
 
-    return { articleCount: category._count.articles };
+    return categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      slug: category.slug,
+      articleCount: category._count.articles,
+    }));
   }
 
   async getPublishedArticlesByCategory(id: number) {
