@@ -75,18 +75,18 @@ export class PublicCategoryController {
     return await this.categoryService.getAllCategories();
   }
 
-  @ApiOperation({ summary: '分页获取分类下所有已发布文章' })
-  @ApiParam({ name: 'id', description: '分类 ID' })
+  @ApiOperation({ summary: '通过 slug 分页获取分类下所有已发布文章' })
+  @ApiParam({ name: 'slug', description: '分类 slug' })
   @ApiQuery({ name: 'page' })
   @ApiQuery({ name: 'limit' })
-  @Get(':id')
-  async getPublishedArticlesByCategory(
-    @Param('id', ParseIntPipe) id: number,
-    @Query('page', ParseIntPipe) page: number = 1,
-    @Query('limit', ParseIntPipe) limit: number = 10,
+  @Get(':slug')
+  async getPublishedArticlesByCategorySlug(
+    @Param('slug') slug: string,
+    @Query('page', ParseIntPipe) page,
+    @Query('limit', ParseIntPipe) limit,
   ) {
-    return await this.categoryService.getPublishedArticlesByCategory(
-      id,
+    return await this.categoryService.getPublishedArticlesByCategorySlug(
+      slug,
       page,
       limit,
     );

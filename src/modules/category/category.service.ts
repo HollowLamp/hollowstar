@@ -78,20 +78,18 @@ export class CategoryService {
     };
   }
 
-  async getPublishedArticlesByCategory(
-    id: number,
+  async getPublishedArticlesByCategorySlug(
+    slug: string,
     page: number,
     limit: number,
   ) {
     const skip = (page - 1) * limit;
 
     const category = await this.prisma.category.findUnique({
-      where: { id },
+      where: { slug },
       include: {
         articles: {
-          where: {
-            status: 'published',
-          },
+          where: { status: 'published' },
           skip,
           take: limit,
         },
@@ -103,7 +101,7 @@ export class CategoryService {
     }
 
     const total = await this.prisma.article.count({
-      where: { categoryId: id, status: 'published' },
+      where: { categoryId: category.id, status: 'published' },
     });
 
     return {
