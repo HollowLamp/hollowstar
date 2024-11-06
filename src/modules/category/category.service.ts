@@ -41,8 +41,29 @@ export class CategoryService {
     });
   }
 
-  async getAllCategories() {
-    return await this.prisma.category.findMany();
+  async getAllCategoriesWithPublishedArticleCount() {
+    const categories = await this.prisma.category.findMany({
+      include: {
+        _count: {
+          select: {
+            articles: {
+              where: { status: 'published' },
+            },
+          },
+        },
+      },
+    });
+
+    if (!categories || categories.length === 0) {
+      throw new NotFoundException('未找到分类');
+    }
+
+    return categories.map((category) => ({
+      id: category.id,
+      name: category.name,
+      slug: category.slug,
+      publishedArticleCount: category._count.articles,
+    }));
   }
 
   async getAllCategoriesWithArticleCount(page: number, limit: number) {

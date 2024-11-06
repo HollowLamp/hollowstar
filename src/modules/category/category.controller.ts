@@ -69,10 +69,10 @@ export class AdminCategoryController {
 export class PublicCategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @ApiOperation({ summary: '获取所有分类' })
+  @ApiOperation({ summary: '获取所有分类及其下所有已发布文章数目' })
   @Get()
   async getAllCategories() {
-    return await this.categoryService.getAllCategories();
+    return await this.categoryService.getAllCategoriesWithPublishedArticleCount();
   }
 
   @ApiOperation({ summary: '通过 slug 分页获取分类下所有已发布文章' })
