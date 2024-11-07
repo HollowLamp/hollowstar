@@ -119,10 +119,10 @@ export class PublicArticleController {
     );
   }
 
-  @ApiOperation({ summary: '根据ID获取已发布文章' })
-  @ApiParam({ name: 'id', description: '文章 ID' })
-  @Get(':id')
-  async getPublishedArticleById(@Param('id', ParseIntPipe) id: number) {
-    return this.articleService.getPublishedArticleById(id);
+  @ApiOperation({ summary: '根据slug获取已发布文章' })
+  @ApiParam({ name: 'slug', description: '文章slug' })
+  @Get(':slug')
+  async getPublishedArticleById(@Param('slug') slug: string) {
+    return this.articleService.getPublishedArticleBySlug(slug);
   }
 }

@@ -35,9 +35,9 @@ export class ArticleService {
     });
   }
 
-  async getPublishedArticleById(id: number) {
+  async getPublishedArticleBySlug(slug: string) {
     return this.prisma.article.findFirst({
-      where: { id, status: ContentStatus.PUBLISHED },
+      where: { slug, status: ContentStatus.PUBLISHED },
       include: { category: true },
     });
   }
