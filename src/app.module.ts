@@ -16,6 +16,8 @@ import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter'
 import { ArticleModule } from './modules/article/article.module';
 import { NoteModule } from './modules/note/note.module';
 import { ThoughtModule } from './modules/thought/thought.module';
+import { CommentModule } from './modules/comment/comment.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { ThoughtModule } from './modules/thought/thought.module';
     ArticleModule,
     NoteModule,
     ThoughtModule,
+    CommentModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [

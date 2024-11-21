@@ -25,6 +25,8 @@ services:
       JWT_EXPIRATION: ${JWT_EXPIRATION}
       server_port: ${server_port}
       api_prefix: ${api_prefix}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
     ports:
       - "3000:3000"
     depends_on:

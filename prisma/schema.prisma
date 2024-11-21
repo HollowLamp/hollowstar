@@ -63,13 +63,19 @@ model Note {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  content   String
-  createdAt DateTime @default(now())
-  articleId Int?
-  noteId    Int?
-  thoughtId Int?
-  article   Article? @relation(fields: [articleId], references: [id])
-  note      Note?    @relation(fields: [noteId], references: [id])
-  thought   Thought? @relation(fields: [thoughtId], references: [id])
+  id          Int      @id @default(autoincrement())
+  content     String
+  createdAt   DateTime @default(now())
+  avatarUrl   String?
+  nickname    String?
+  email       String?
+  website     String?
+  clientIp    String?
+  userAgent   String?
+  articleSlug String?
+  noteId      Int?
+  thoughtId   Int?
+  article     Article? @relation(fields: [articleSlug], references: [slug])
+  note        Note?    @relation(fields: [noteId], references: [id])
+  thought     Thought? @relation(fields: [thoughtId], references: [id])
 }
