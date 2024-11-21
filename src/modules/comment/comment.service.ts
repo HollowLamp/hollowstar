@@ -1,28 +1,29 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { MailService } from 'src/mail/mail.service';
 import { ConfigService } from '@nestjs/config';
+import { containsBannedWords, loadBannedWords } from 'src/utils/filter-comment';
 
 @Injectable()
 export class CommentService {
+  private blockedKeywords: string[];
   constructor(
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
     private configService: ConfigService,
-  ) {}
+  ) {
+    this.blockedKeywords = loadBannedWords();
+  }
 
   async createComment(createCommentDto: CreateCommentDto) {
-    const {
-      content,
-      articleSlug,
-      noteId,
-      thoughtId,
-      nickname,
-      email,
-      avatarUrl,
-      website,
-    } = createCommentDto;
+    if (containsBannedWords(createCommentDto.content, this.blockedKeywords)) {
+      throw new BadRequestException('评论内容包含屏蔽词，无法提交');
+    }
 
     await this.mailService.sendNotificationEmail(
       this.configService.get('EMAIL_USER'),
@@ -32,16 +33,7 @@ export class CommentService {
     );
 
     return await this.prisma.comment.create({
-      data: {
-        content,
-        articleSlug,
-        noteId,
-        thoughtId,
-        nickname,
-        email,
-        avatarUrl,
-        website,
-      },
+      data: createCommentDto,
     });
   }
 

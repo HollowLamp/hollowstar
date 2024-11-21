@@ -45,4 +45,14 @@ export class CreateCommentDto {
   @IsOptional()
   @IsUrl({}, { message: '网址格式不正确' })
   website?: string;
+
+  @ApiProperty({ description: '客户端 IP', required: false })
+  @IsOptional()
+  @IsString({ message: '客户端 IP 必须为字符串' })
+  clientIp?: string;
+
+  @ApiProperty({ description: '用户代理字符串', required: false })
+  @IsOptional()
+  @IsString({ message: '用户代理字符串必须为字符串' })
+  userAgent?: string;
 }
