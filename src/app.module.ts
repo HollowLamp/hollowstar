@@ -64,15 +64,15 @@ import { ClientIpInterceptor } from './common/interceptors/ip.interceptor';
     },
     {
       provide: APP_INTERCEPTOR,
+      useClass: ClientIpInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
       useClass: LoggerInterceptor,
     },
     {
       provide: APP_INTERCEPTOR,
       useClass: FormatResponseInterceptor,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ClientIpInterceptor,
     },
     {
       provide: APP_GUARD,
