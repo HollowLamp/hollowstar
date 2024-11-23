@@ -18,9 +18,13 @@ import { NoteModule } from './modules/note/note.module';
 import { ThoughtModule } from './modules/thought/thought.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { MailModule } from './mail/mail.module';
+import { RedisModule } from './redis/redis.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     LoggerModule,
     PrismaModule,
     ConfigModule.forRoot({
@@ -41,6 +45,8 @@ import { MailModule } from './mail/mail.module';
     ThoughtModule,
     CommentModule,
     MailModule,
+    RedisModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [

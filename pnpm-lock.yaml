@@ -32,6 +32,9 @@ importers:
       '@nestjs/platform-express':
         specifier: ^10.0.0
         version: 10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.5)
+      '@nestjs/schedule':
+        specifier: ^4.1.1
+        version: 4.1.1(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.5)(reflect-metadata@0.2.2)(rxjs@7.8.1))
       '@nestjs/swagger':
         specifier: ^7.4.2
         version: 7.4.2(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.5)(reflect-metadata@0.2.2)(rxjs@7.8.1))(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
@@ -56,9 +59,6 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
-      ejs:
-        specifier: ^3.1.10
-        version: 3.1.10
       husky:
         specifier: ^9.1.6
         version: 9.1.6
@@ -80,6 +80,9 @@ importers:
       prisma:
         specifier: ^5.21.1
         version: 5.21.1
+      redis:
+        specifier: ^4.7.0
+        version: 4.7.0
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.2
@@ -686,6 +689,12 @@ packages:
       '@nestjs/common': ^10.0.0
       '@nestjs/core': ^10.0.0
 
+  '@nestjs/schedule@4.1.1':
+    resolution: {integrity: sha512-VxAnCiU4HP0wWw8IdWAVfsGC/FGjyToNjjUtXDEQL6oj+w/N5QDd2VT9k6d7Jbr8PlZuBZNdWtDKSkH5bZ+RXQ==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^8.0.0 || ^9.0.0 || ^10.0.0
+
   '@nestjs/schematics@10.2.2':
     resolution: {integrity: sha512-D4pJ46E8llCA7WPr3cV6sfRqDlvnTjQWnF1fLyKYD3Ldl+KPtlLyIcxaqlLTB0YR9ItKNKIZTJzUehRxR7UUsQ==}
     peerDependencies:
@@ -770,6 +779,35 @@ packages:
   '@prisma/get-platform@5.21.1':
     resolution: {integrity: sha512-sRxjL3Igst3ct+e8ya/x//cDXmpLbZQ5vfps2N4tWl4VGKQAmym77C/IG/psSMsQKszc8uFC/q1dgmKFLUgXZQ==}
 
+  '@redis/bloom@1.2.0':
+    resolution: {integrity: sha512-HG2DFjYKbpNmVXsa0keLHp/3leGJz1mjh09f2RLGGLQZzSHpkmZWuwJbAvo3QcRY8p80m5+ZdXZdYOSBLlp7Cg==}
+    peerDependencies:
+      '@redis/client': ^1.0.0
+
+  '@redis/client@1.6.0':
+    resolution: {integrity: sha512-aR0uffYI700OEEH4gYnitAnv3vzVGXCFvYfdpu/CJKvk4pHfLPEy/JSZyrpQ+15WhXe1yJRXLtfQ84s4mEXnPg==}
+    engines: {node: '>=14'}
+
+  '@redis/graph@1.1.1':
+    resolution: {integrity: sha512-FEMTcTHZozZciLRl6GiiIB4zGm5z5F3F6a6FZCyrfxdKOhFlGkiAqlexWMBzCi4DcRoyiOsuLfW+cjlGWyExOw==}
+    peerDependencies:
+      '@redis/client': ^1.0.0
+
+  '@redis/json@1.0.7':
+    resolution: {integrity: sha512-6UyXfjVaTBTJtKNG4/9Z8PSpKE6XgSyEb8iwaqDcy+uKrd/DGYHTWkUdnQDyzm727V7p21WUMhsqz5oy65kPcQ==}
+    peerDependencies:
+      '@redis/client': ^1.0.0
+
+  '@redis/search@1.2.0':
+    resolution: {integrity: sha512-tYoDBbtqOVigEDMAcTGsRlMycIIjwMCgD8eR2t0NANeQmgK/lvxNAvYyb6bZDD4frHRhIHkJu2TBRvB0ERkOmw==}
+    peerDependencies:
+      '@redis/client': ^1.0.0
+
+  '@redis/time-series@1.1.0':
+    resolution: {integrity: sha512-c1Q99M5ljsIuc4YdaCwfUEXsofakb9c8+Zse2qxTadu8TalLXuAESzLvFAvNVbkmSlvlzIQOLpBCmWI9wTOt+g==}
+    peerDependencies:
+      '@redis/client': ^1.0.0
+
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
@@ -847,6 +885,9 @@ packages:
 
   '@types/jsonwebtoken@9.0.5':
     resolution: {integrity: sha512-VRLSGzik+Unrup6BsouBeHsf4d1hOEgYWTm/7Nmw1sXoN1+tRly/Gy/po3yeahnP4jfnQWWAhQAqcNfH7ngOkA==}
+
+  '@types/luxon@3.4.2':
+    resolution: {integrity: sha512-TifLZlFudklWlMBfhubvgqTXRzLDI5pCbGa4P8a3wPyUQSW+1xQ5eDsreP9DWHX3tjq1ke96uYG/nwundroWcA==}
 
   '@types/methods@1.1.4':
     resolution: {integrity: sha512-ymXWVrDiCxTBE3+RIrrP533E70eA+9qu7zdWoHuOmGujkYtzf4HQF96b8nwHLqhuf4ykX61IGRIB38CC6/sImQ==}
@@ -1343,6 +1384,10 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
 
+  cluster-key-slot@1.1.2:
+    resolution: {integrity: sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA==}
+    engines: {node: '>=0.10.0'}
+
   co@4.6.0:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
     engines: {iojs: '>= 1.0.0', node: '>= 0.12.0'}
@@ -1499,6 +1544,9 @@ packages:
 
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
+
+  cron@3.1.7:
+    resolution: {integrity: sha512-tlBg7ARsAMQLzgwqVxy8AZl/qlTc5nibqYwtNGoCrd+cV+ugI+tvZC1oT/8dFH8W455YrywGykx/KMmAqOr7Jw==}
 
   cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -1949,6 +1997,10 @@ packages:
     resolution: {integrity: sha512-+5J6MS/5XksCuXq++uFRsnUd7Ovu1XenbeuIuNRJxYWjgQbPuFhT14lAvsWfqfAmnwluf1OwMjz39HjfLPci0Q==}
     engines: {node: '>=10'}
     deprecated: This package is no longer supported.
+
+  generic-pool@3.9.0:
+    resolution: {integrity: sha512-hymDOu5B53XvN4QT9dBmZxPX4CWhBPPLguTZ9MMFeFa/Kg0xWVfylOVNlJji/E7yTZWFd/q9GO5TxDLq156D7g==}
+    engines: {node: '>= 4'}
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -2595,6 +2647,10 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
+  luxon@3.4.4:
+    resolution: {integrity: sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==}
+    engines: {node: '>=12'}
+
   magic-string@0.30.8:
     resolution: {integrity: sha512-ISQTe55T2ao7XtlAStud6qwYPZjE4GK1S/BeVPus4jrq6JuOnQ00YKQC581RWhR122W7msZV263KzVeLoqidyQ==}
     engines: {node: '>=12'}
@@ -3052,6 +3108,9 @@ packages:
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
+
+  redis@4.7.0:
+    resolution: {integrity: sha512-zvmkHEAdGMn+hMRXuMBtu4Vo5P6rHQjLoHftu+lBqq8ZTA3RCVC/WzD790bkKKiNFp7d5/9PcSD19fJyyRvOdQ==}
 
   reflect-metadata@0.2.2:
     resolution: {integrity: sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==}
@@ -3548,6 +3607,10 @@ packages:
   utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
+
+  uuid@10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
 
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
@@ -4433,6 +4496,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@nestjs/schedule@4.1.1(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.5)(reflect-metadata@0.2.2)(rxjs@7.8.1))':
+    dependencies:
+      '@nestjs/common': 10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      '@nestjs/core': 10.4.5(@nestjs/common@10.4.5(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.4.5)(reflect-metadata@0.2.2)(rxjs@7.8.1)
+      cron: 3.1.7
+      uuid: 10.0.0
+
   '@nestjs/schematics@10.2.2(chokidar@3.6.0)(typescript@5.3.3)':
     dependencies:
       '@angular-devkit/core': 17.3.10(chokidar@3.6.0)
@@ -4527,6 +4597,32 @@ snapshots:
   '@prisma/get-platform@5.21.1':
     dependencies:
       '@prisma/debug': 5.21.1
+
+  '@redis/bloom@1.2.0(@redis/client@1.6.0)':
+    dependencies:
+      '@redis/client': 1.6.0
+
+  '@redis/client@1.6.0':
+    dependencies:
+      cluster-key-slot: 1.1.2
+      generic-pool: 3.9.0
+      yallist: 4.0.0
+
+  '@redis/graph@1.1.1(@redis/client@1.6.0)':
+    dependencies:
+      '@redis/client': 1.6.0
+
+  '@redis/json@1.0.7(@redis/client@1.6.0)':
+    dependencies:
+      '@redis/client': 1.6.0
+
+  '@redis/search@1.2.0(@redis/client@1.6.0)':
+    dependencies:
+      '@redis/client': 1.6.0
+
+  '@redis/time-series@1.1.0(@redis/client@1.6.0)':
+    dependencies:
+      '@redis/client': 1.6.0
 
   '@sinclair/typebox@0.27.8': {}
 
@@ -4624,6 +4720,8 @@ snapshots:
   '@types/jsonwebtoken@9.0.5':
     dependencies:
       '@types/node': 20.16.15
+
+  '@types/luxon@3.4.2': {}
 
   '@types/methods@1.1.4': {}
 
@@ -5209,6 +5307,8 @@ snapshots:
 
   clone@1.0.4: {}
 
+  cluster-key-slot@1.1.2: {}
+
   co@4.6.0: {}
 
   collect-v8-coverage@1.0.2: {}
@@ -5381,6 +5481,11 @@ snapshots:
       - ts-node
 
   create-require@1.1.1: {}
+
+  cron@3.1.7:
+    dependencies:
+      '@types/luxon': 3.4.2
+      luxon: 3.4.4
 
   cross-spawn@7.0.3:
     dependencies:
@@ -5881,6 +5986,8 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wide-align: 1.1.5
+
+  generic-pool@3.9.0: {}
 
   gensync@1.0.0-beta.2: {}
 
@@ -6719,6 +6826,8 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
+  luxon@3.4.4: {}
+
   magic-string@0.30.8:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -7116,6 +7225,15 @@ snapshots:
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.1
+
+  redis@4.7.0:
+    dependencies:
+      '@redis/bloom': 1.2.0(@redis/client@1.6.0)
+      '@redis/client': 1.6.0
+      '@redis/graph': 1.1.1(@redis/client@1.6.0)
+      '@redis/json': 1.0.7(@redis/client@1.6.0)
+      '@redis/search': 1.2.0(@redis/client@1.6.0)
+      '@redis/time-series': 1.1.0(@redis/client@1.6.0)
 
   reflect-metadata@0.2.2: {}
 
@@ -7575,6 +7693,8 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   utils-merge@1.0.1: {}
+
+  uuid@10.0.0: {}
 
   v8-compile-cache-lib@3.0.1: {}
 

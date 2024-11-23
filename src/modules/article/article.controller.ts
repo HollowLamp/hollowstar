@@ -8,6 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   Query,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -21,6 +22,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { IsPublic } from 'src/common/decorators/is-public.decorator';
 import { ContentStatus } from 'src/enums/content-status.enum';
+import { Request } from 'express';
 
 @ApiTags('文章管理')
 @ApiBearerAuth()
@@ -122,7 +124,10 @@ export class PublicArticleController {
   @ApiOperation({ summary: '根据slug获取已发布文章' })
   @ApiParam({ name: 'slug', description: '文章slug' })
   @Get(':slug')
-  async getPublishedArticleById(@Param('slug') slug: string) {
-    return this.articleService.getPublishedArticleBySlug(slug);
+  async getPublishedArticleById(
+    @Param('slug') slug: string,
+    @Req() request: Request,
+  ) {
+    return this.articleService.getPublishedArticleBySlug(slug, request);
   }
 }

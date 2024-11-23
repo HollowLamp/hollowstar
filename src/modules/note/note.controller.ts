@@ -8,6 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   Query,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -21,6 +22,7 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { IsPublic } from 'src/common/decorators/is-public.decorator';
 import { ContentStatus } from 'src/enums/content-status.enum';
+import { Request } from 'express';
 
 @ApiTags('随笔管理')
 @ApiBearerAuth()
@@ -109,7 +111,10 @@ export class PublicNoteController {
   @ApiOperation({ summary: '根据ID获取已发布随笔' })
   @ApiParam({ name: 'id', description: '随笔 ID' })
   @Get(':id')
-  async getPublishedNoteById(@Param('id', ParseIntPipe) id: number) {
-    return this.noteService.getPublishedNoteById(id);
+  async getPublishedNoteById(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request: Request,
+  ) {
+    return this.noteService.getPublishedNoteById(id, request);
   }
 }

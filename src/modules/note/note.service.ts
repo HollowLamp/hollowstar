@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { ContentStatus } from 'src/enums/content-status.enum';
+import { RedisService } from 'src/redis/redis.service';
+import { Request } from 'express';
 
 @Injectable()
 export class NoteService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private redisService: RedisService,
+  ) {}
 
   async createNote(createNoteDto: CreateNoteDto) {
     return this.prisma.note.create({
@@ -37,16 +42,14 @@ export class NoteService {
   ) {
     const skip = (page - 1) * limit;
 
-    // 构建 `where` 条件
     const where: any = {};
     if (status) {
       where.status = status;
     }
     if (search) {
-      where.title = { contains: search, mode: 'insensitive' }; // 忽略大小写的搜索
+      where.title = { contains: search, mode: 'insensitive' };
     }
 
-    // 排序
     const orderBy = { [sortField]: sortOrder };
 
     const [data, total] = await Promise.all([
@@ -66,9 +69,33 @@ export class NoteService {
     return this.prisma.note.findUnique({ where: { id } });
   }
 
-  async getPublishedNoteById(id: number) {
-    return this.prisma.note.findFirst({
+  async getPublishedNoteById(id: number, request: Request) {
+    const viewKey = `note:${id}:views`;
+    const ip = request.ip;
+    const ipKey = `note:${id}:ip:${ip}`;
+
+    const note = await this.prisma.note.findFirst({
       where: { id, status: ContentStatus.PUBLISHED },
     });
+
+    if (!note) {
+      throw new NotFoundException('Note未找到');
+    }
+
+    let redisViews = await this.redisService.get(viewKey);
+    if (!redisViews) {
+      redisViews = note.views.toString();
+      await this.redisService.set(viewKey, redisViews);
+    }
+
+    const isVisited = await this.redisService.get(ipKey);
+    if (!isVisited) {
+      await this.redisService.increment(viewKey);
+      await this.redisService.set(ipKey, '1', 600);
+    }
+
+    const views = parseInt(await this.redisService.get(viewKey), 10);
+
+    return { ...note, views };
   }
 }
