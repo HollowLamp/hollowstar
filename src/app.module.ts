@@ -22,6 +22,7 @@ import { RedisModule } from './redis/redis.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TaskModule } from './task/task.module';
 import { StatisticsModule } from './statistics/statistics.module';
+import { ClientIpInterceptor } from './common/interceptors/ip.interceptor';
 
 @Module({
   imports: [
@@ -68,6 +69,10 @@ import { StatisticsModule } from './statistics/statistics.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: FormatResponseInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClientIpInterceptor,
     },
     {
       provide: APP_GUARD,

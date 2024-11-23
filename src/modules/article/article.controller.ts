@@ -21,7 +21,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { IsPublic } from 'src/common/decorators/is-public.decorator';
 import { ContentStatus } from 'src/enums/content-status.enum';
-import { RealIp } from 'src/common/decorators/real-ip.decorator';
+import { ClientIp } from 'src/common/decorators/ip.decorator';
 
 @ApiTags('文章管理')
 @ApiBearerAuth()
@@ -125,7 +125,7 @@ export class PublicArticleController {
   @Get(':slug')
   async getPublishedArticleById(
     @Param('slug') slug: string,
-    @RealIp() ip: string,
+    @ClientIp() ip: string,
   ) {
     return this.articleService.getPublishedArticleBySlug(slug, ip);
   }

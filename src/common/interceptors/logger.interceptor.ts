@@ -13,19 +13,7 @@ export class LoggerInterceptor implements NestInterceptor {
   constructor(private readonly logger: Logger) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const req = context.switchToHttp().getRequest();
-
-    const forwardedFor =
-      req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'];
-    const realIp = forwardedFor
-      ? Array.isArray(forwardedFor)
-        ? forwardedFor[0]
-        : forwardedFor.split(',')[0].trim()
-      : req.ip;
-
-    const requestIp = realIp;
-
-    const headersLog = JSON.stringify(req.headers, null, 2);
+    const req = context.getArgByIndex(1).req;
 
     const now = Date.now();
 
@@ -35,8 +23,7 @@ export class LoggerInterceptor implements NestInterceptor {
 ##############################################################################################################
 Request original url: ${req.originalUrl}
 Method: ${req.method}
-Headers: ${headersLog}
-IP: ${requestIp}
+IP: ${req.ip}
 Response data: ${JSON.stringify(data)}
 Duration: ${Date.now() - now}ms
 ##############################################################################################################

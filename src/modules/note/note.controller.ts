@@ -21,7 +21,7 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { IsPublic } from 'src/common/decorators/is-public.decorator';
 import { ContentStatus } from 'src/enums/content-status.enum';
-import { RealIp } from 'src/common/decorators/real-ip.decorator';
+import { ClientIp } from 'src/common/decorators/ip.decorator';
 
 @ApiTags('随笔管理')
 @ApiBearerAuth()
@@ -112,7 +112,7 @@ export class PublicNoteController {
   @Get(':id')
   async getPublishedNoteById(
     @Param('id', ParseIntPipe) id: number,
-    @RealIp() ip: string,
+    @ClientIp() ip: string,
   ) {
     return this.noteService.getPublishedNoteById(id, ip);
   }
