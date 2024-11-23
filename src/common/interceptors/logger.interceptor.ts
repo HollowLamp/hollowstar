@@ -25,6 +25,8 @@ export class LoggerInterceptor implements NestInterceptor {
 
     const requestIp = realIp;
 
+    const headersLog = JSON.stringify(req.headers, null, 2);
+
     const now = Date.now();
 
     return next.handle().pipe(
@@ -33,6 +35,7 @@ export class LoggerInterceptor implements NestInterceptor {
 ##############################################################################################################
 Request original url: ${req.originalUrl}
 Method: ${req.method}
+Headers: ${headersLog}
 IP: ${requestIp}
 Response data: ${JSON.stringify(data)}
 Duration: ${Date.now() - now}ms
