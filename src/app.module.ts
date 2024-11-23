@@ -21,6 +21,7 @@ import { MailModule } from './mail/mail.module';
 import { RedisModule } from './redis/redis.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TaskModule } from './task/task.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { TaskModule } from './task/task.module';
     MailModule,
     RedisModule,
     TaskModule,
+    StatisticsModule,
   ],
   controllers: [AppController],
   providers: [

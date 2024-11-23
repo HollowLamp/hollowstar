@@ -36,30 +36,32 @@ model Thought {
 }
 
 model Article {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  title      String
-  content    String
-  status     String
-  likesCount Int       @default(0)
-  views      Int       @default(0)
-  slug       String    @unique
-  categoryId Int
-  category   Category  @relation(fields: [categoryId], references: [id])
-  comments   Comment[]
+  id             Int              @id @default(autoincrement())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  title          String
+  content        String
+  status         String
+  likesCount     Int              @default(0)
+  views          Int              @default(0)
+  slug           String           @unique
+  categoryId     Int
+  category       Category         @relation(fields: [categoryId], references: [id])
+  comments       Comment[]
+  ArticleViewLog ArticleViewLog[]
 }
 
 model Note {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  title      String
-  content    String
-  status     String
-  views      Int       @default(0)
-  likesCount Int       @default(0)
-  comments   Comment[]
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  title       String
+  content     String
+  status      String
+  views       Int           @default(0)
+  likesCount  Int           @default(0)
+  comments    Comment[]
+  NoteViewLog NoteViewLog[]
 }
 
 model Comment {
@@ -78,4 +80,20 @@ model Comment {
   article     Article? @relation(fields: [articleSlug], references: [slug])
   note        Note?    @relation(fields: [noteId], references: [id])
   thought     Thought? @relation(fields: [thoughtId], references: [id])
+}
+
+model ArticleViewLog {
+  id          Int      @id @default(autoincrement())
+  articleSlug String
+  article     Article  @relation(fields: [articleSlug], references: [slug])
+  viewCount   Int
+  createdAt   DateTime @default(now())
+}
+
+model NoteViewLog {
+  id        Int      @id @default(autoincrement())
+  noteId    Int
+  note      Note     @relation(fields: [noteId], references: [id])
+  viewCount Int
+  createdAt DateTime @default(now())
 }

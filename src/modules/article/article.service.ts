@@ -47,6 +47,7 @@ export class ArticleService {
 
     const article = await this.prisma.article.findFirst({
       where: { slug, status: ContentStatus.PUBLISHED },
+      include: { category: true },
     });
 
     if (!article) {

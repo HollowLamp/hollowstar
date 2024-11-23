@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { SyncService } from './sync.service';
 import { Logger } from 'src/logger/logger';
 
@@ -10,7 +10,7 @@ export class TaskService {
   @Inject(Logger)
   private logger: Logger;
 
-  @Cron('0 4 * * *')
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async handleNoteViewsSync() {
     this.logger.log('views syncToDB start', 'Task Service');
     await this.syncService.syncViewsToDatabase();

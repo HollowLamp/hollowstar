@@ -13,48 +13,75 @@ export class SyncService {
     const noteKeys = await this.redisService.scan('note:*:views');
     const articleKeys = await this.redisService.scan('article:*:views');
 
-    const noteUpdates = [];
-    const articleUpdates = [];
-    const redisDeletes = [];
+    const noteLogs = [];
+    const articleLogs = [];
 
     for (const key of noteKeys) {
       const noteId = parseInt(key.split(':')[1], 10);
-      const views = parseInt(await this.redisService.get(key), 10);
+      const redisViews = parseInt(await this.redisService.get(key), 10);
 
-      if (!isNaN(noteId) && !isNaN(views)) {
-        noteUpdates.push(
-          this.prisma.note.update({
+      if (!isNaN(noteId) && !isNaN(redisViews)) {
+        const dbNote = await this.prisma.note.findUnique({
+          where: { id: noteId },
+          select: { views: true },
+        });
+
+        const dbViews = dbNote?.views || 0;
+        const increment = redisViews - dbViews;
+
+        if (increment > 0) {
+          noteLogs.push(
+            this.prisma.noteViewLog.create({
+              data: {
+                noteId,
+                viewCount: increment,
+              },
+            }),
+          );
+
+          await this.prisma.note.update({
             where: { id: noteId },
-            data: { views },
-          }),
-        );
+            data: { views: redisViews },
+          });
 
-        redisDeletes.push(key);
+          await this.redisService.delete(key);
+        }
       }
     }
 
     for (const key of articleKeys) {
-      const slug = key.split(':')[1];
-      const views = parseInt(await this.redisService.get(key), 10);
+      const articleSlug = key.split(':')[1];
+      const redisViews = parseInt(await this.redisService.get(key), 10);
 
-      if (slug && !isNaN(views)) {
-        articleUpdates.push(
-          this.prisma.article.update({
-            where: { slug },
-            data: { views },
-          }),
-        );
+      if (!isNaN(redisViews)) {
+        const dbArticle = await this.prisma.article.findUnique({
+          where: { slug: articleSlug },
+          select: { views: true },
+        });
 
-        redisDeletes.push(key);
+        const dbViews = dbArticle?.views || 0;
+        const increment = redisViews - dbViews;
+
+        if (increment > 0) {
+          articleLogs.push(
+            this.prisma.articleViewLog.create({
+              data: {
+                articleSlug,
+                viewCount: increment,
+              },
+            }),
+          );
+
+          await this.prisma.article.update({
+            where: { slug: articleSlug },
+            data: { views: redisViews },
+          });
+
+          await this.redisService.delete(key);
+        }
       }
     }
 
-    if (noteUpdates.length > 0 || articleUpdates.length > 0) {
-      await this.prisma.$transaction([...noteUpdates, ...articleUpdates]);
-
-      for (const key of redisDeletes) {
-        await this.redisService.delete(key);
-      }
-    }
+    await Promise.all([...noteLogs, ...articleLogs]);
   }
 }

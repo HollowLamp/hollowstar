@@ -12,6 +12,13 @@ services:
     networks:
       - hollowstar-network
 
+  redis:
+    image: redis:7
+    volumes:
+      - redis_data:/data
+    networks:
+      - hollowstar-network
+
   app:
     build:
       context: .
@@ -27,15 +34,22 @@ services:
       api_prefix: ${api_prefix}
       EMAIL_USER: ${EMAIL_USER}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
     ports:
       - "3000:3000"
     depends_on:
       - postgres
+      - redis
+    volumes:
+      - ./logs:/app/logs
     networks:
       - hollowstar-network
 
 volumes:
   postgres_data:
+  redis_data:
 
 networks:
   hollowstar-network:
+    driver: bridge
