@@ -4,7 +4,6 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { ContentStatus } from 'src/enums/content-status.enum';
 import { RedisService } from 'src/redis/redis.service';
-import { Request } from 'express';
 
 @Injectable()
 export class NoteService {
@@ -69,9 +68,8 @@ export class NoteService {
     return this.prisma.note.findUnique({ where: { id } });
   }
 
-  async getPublishedNoteById(id: number, request: Request) {
+  async getPublishedNoteById(id: number, ip: string) {
     const viewKey = `note:${id}:views`;
-    const ip = request.ip;
     const ipKey = `note:${id}:ip:${ip}`;
 
     const note = await this.prisma.note.findFirst({

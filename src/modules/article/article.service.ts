@@ -4,7 +4,6 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { ContentStatus } from 'src/enums/content-status.enum';
 import { PaginationResult } from 'src/interface/pagination.interface';
-import { Request } from 'express';
 import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
@@ -40,9 +39,8 @@ export class ArticleService {
     });
   }
 
-  async getPublishedArticleBySlug(slug: string, request: Request) {
+  async getPublishedArticleBySlug(slug: string, ip: string) {
     const viewKey = `article:${slug}:views`;
-    const ip = request.ip;
     const ipKey = `article:${slug}:ip:${ip}`;
 
     const article = await this.prisma.article.findFirst({

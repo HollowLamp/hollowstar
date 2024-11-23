@@ -23,7 +23,7 @@ export class LoggerInterceptor implements NestInterceptor {
         : forwardedFor.split(',')[0].trim()
       : req.ip;
 
-    req.ip = realIp;
+    const requestIp = realIp;
 
     const now = Date.now();
 
@@ -33,7 +33,7 @@ export class LoggerInterceptor implements NestInterceptor {
 ##############################################################################################################
 Request original url: ${req.originalUrl}
 Method: ${req.method}
-IP: ${req.ip}
+IP: ${requestIp}
 Response data: ${JSON.stringify(data)}
 Duration: ${Date.now() - now}ms
 ##############################################################################################################
