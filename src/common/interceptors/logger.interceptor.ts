@@ -13,7 +13,17 @@ export class LoggerInterceptor implements NestInterceptor {
   constructor(private readonly logger: Logger) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const req = context.getArgByIndex(1).req;
+    const req = context.switchToHttp().getRequest();
+
+    const forwardedFor =
+      req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'];
+    const realIp = forwardedFor
+      ? Array.isArray(forwardedFor)
+        ? forwardedFor[0]
+        : forwardedFor.split(',')[0].trim()
+      : req.ip;
+
+    req.ip = realIp;
 
     const now = Date.now();
 
